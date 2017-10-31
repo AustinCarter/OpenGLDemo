@@ -33,6 +33,9 @@ float lastFrame = 0.0f;
 // stores how much we're seeing of either texture
 float mixValue = 0.2f;
 
+//
+glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+
 
 int main()
 {
@@ -68,14 +71,14 @@ int main()
 	if (glewInit() != GLEW_OK)
 		std::cout << "Failed to initialize GLEW" << std::endl;
 
-	std::cout << glGetString(GL_VERSION) << std::endl;
+	//std::cout << glGetString(GL_VERSION) << std::endl;
 
 	Shader ourShader("resources/shader.vert", "resources/shader.frag"); //load and compile shaders
+	Shader lampShader("resources/lightShader.vert", "resources/lightShader.frag"); //load and compile light shaders
 
 
-	// set up vertex data (and buffer(s)) and configure vertex attributes
-	// ------------------------------------------------------------------
-	float vertices[] = {
+	//vertex data for drawing textured cube
+	/*float vertices[] = {
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 		0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
 		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
@@ -117,25 +120,53 @@ int main()
 		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
 		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-	};
+	};*/
 
-	glm::vec3 cubePositions[] = {
-		glm::vec3(0.0f,  0.0f,  0.0f),
-		glm::vec3(2.0f,  5.0f, -15.0f),
-		glm::vec3(-1.5f, -2.2f, -2.5f),
-		glm::vec3(-3.8f, -2.0f, -12.3f),
-		glm::vec3(2.4f, -0.4f, -3.5f),
-		glm::vec3(-1.7f,  3.0f, -7.5f),
-		glm::vec3(1.3f, -2.0f, -2.5f),
-		glm::vec3(1.5f,  2.0f, -2.5f),
-		glm::vec3(1.5f,  0.2f, -1.5f),
-		glm::vec3(-1.3f,  1.0f, -1.5f)
-	};
+	 float vertices[] = {
+    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+    -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+
+    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+
+    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+
+     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+
+    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+
+    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+     0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+};
 
 
-	
-
-	//end camera init
 	
 
 	unsigned int indices[] = {
@@ -157,19 +188,25 @@ int main()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	//normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
 	/*// color attribute
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);*/
+
 	// texture coord attribute
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	/*glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);*/
 
 
 	// load and create a texture 
 	// -------------------------
-	unsigned int texture1, texture2;
+	/*unsigned int texture1, texture2;
 	glGenTextures(1, &texture1);
 	glBindTexture(GL_TEXTURE_2D, texture1); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
 
@@ -229,11 +266,22 @@ int main()
 	{
 		std::cout << "Failed to load texture" << std::endl;
 	}
-	stbi_image_free(data);
+	stbi_image_free(data);*/
 
-	ourShader.use();
-	glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0); // set it manually
-	ourShader.setInt("texture2", 1); // or with shader class
+
+	//make the light object
+	unsigned int lightVAO;
+	glGenVertexArrays(1,&lightVAO);
+	glBindVertexArray(lightVAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER,VBO);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	//ourShader.use();
+	//glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0); // set it manually
+	//ourShader.setInt("texture2", 1); // or with shader class
 
 
 	glEnable(GL_DEPTH_TEST);
@@ -247,6 +295,11 @@ int main()
 	// -----------
 	while (!glfwWindowShouldClose(window))
 	{
+
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
 		glfwSetCursorPosCallback(window, mouse_callback);
 
 		// input
@@ -258,37 +311,53 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 
 	
-		glActiveTexture(GL_TEXTURE0);
+		/*glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, texture2);
+		glBindTexture(GL_TEXTURE_2D, texture2);*/
 
 
-		float currentFrame = glfwGetTime();
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
 
-		
-		glm::mat4 view = camera.GetViewMatrix();
-		ourShader.setMat4("view", view);
 
-		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-		ourShader.setMat4("projection", projection);
-
-		unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
-		unsigned int viewLoc   = glGetUniformLocation(ourShader.ID, "view");
-		unsigned int projLoc = glGetUniformLocation(ourShader.ID, "projection");
-
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-			
-
-		// set the texture mix value in the shader
-		ourShader.setFloat("mixValue", mixValue);
-
-		// render container
 		ourShader.use();
-		glBindVertexArray(VAO);
+		
+		// be sure to activate shader when setting uniforms/drawing objects
+        ourShader.use();
+        ourShader.setVec3("light.position", lightPos);
+        ourShader.setVec3("viewPos", camera.Position);
+
+        // light properties
+        glm::vec3 lightColor;
+        lightColor.x = sin(glfwGetTime() * 2.0f);
+        lightColor.y = sin(glfwGetTime() * 0.7f);
+        lightColor.z = sin(glfwGetTime() * 1.3f);
+        glm::vec3 diffuseColor = lightColor   * glm::vec3(0.5f); // decrease the influence
+        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
+        ourShader.setVec3("light.ambient", ambientColor);
+        ourShader.setVec3("light.diffuse", diffuseColor);
+        ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+        // material properties
+        ourShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+        ourShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+        ourShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f); // specular lighting doesn't have full effect on this object's material
+        ourShader.setFloat("material.shininess", 32.0f);
+
+        // view/projection transformations
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        glm::mat4 view = camera.GetViewMatrix();
+        ourShader.setMat4("projection", projection);
+        ourShader.setMat4("view", view);
+
+        // world transformation
+        glm::mat4 model;
+        ourShader.setMat4("model", model);
+
+        // render the cube
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+		
+		/*glBindVertexArray(VAO);
 		for (unsigned int i = 0; i < 10; i++)
 		{
 			glm::mat4 model;
@@ -298,7 +367,26 @@ int main()
 			ourShader.setMat4("model", model);
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
-		} 
+		} */
+
+
+
+
+		//render the light
+
+		lampShader.use();
+		// set the model, view and projection matrix uniforms
+		model = glm::mat4();
+		model = glm::translate(model, lightPos);
+		model = glm::scale(model, glm::vec3(0.2f)); 
+
+		lampShader.setMat4("model",model);
+		lampShader.setMat4("view",view);
+		lampShader.setMat4("projection",projection);
+
+		glBindVertexArray(lightVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
