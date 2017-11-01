@@ -134,6 +134,7 @@
   <ItemGroup>
     <None Include="resources\lightShader.frag" />
     <None Include="resources\lightShader.vert" />
+    <None Include="resources\outlineShader.frag" />
     <None Include="resources\shader.frag" />
     <None Include="resources\shader.vert" />
   </ItemGroup>
