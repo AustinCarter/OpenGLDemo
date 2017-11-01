@@ -75,12 +75,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\Austin\Desktop\OpenGL\OpenGL\Dependencies\GLM\include;$(SolutionDir)\OpenGL\Dependencies\GLEW\include;$(SolutionDir)OpenGL\Dependencies\GLFW\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\OpenGL\Dependencies\Assimp\include;C:\Users\Austin\Desktop\OpenGL\OpenGL\Dependencies\GLM\include;$(SolutionDir)\OpenGL\Dependencies\GLEW\include;$(SolutionDir)OpenGL\Dependencies\GLFW\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)OpenGL\Dependencies\GLFW\lib-vc2015;$(SolutionDir)OpenGL\Dependencies\GLEW\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;user32.lib;Gdi32.lib;Shell32.lib;glew32s.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\OpenGL\Dependencies\Assimp\lib;$(SolutionDir)OpenGL\Dependencies\GLFW\lib-vc2015;$(SolutionDir)OpenGL\Dependencies\GLEW\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;user32.lib;Gdi32.lib;Shell32.lib;glew32s.lib;assimp.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -97,14 +97,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\Austin\Desktop\OpenGL\OpenGL\Dependencies\GLM\include;$(SolutionDir)\OpenGL\Dependencies\GLEW\include;$(SolutionDir)OpenGL\Dependencies\GLFW\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\OpenGL\Dependencies\Assimp\include;C:\Users\Austin\Desktop\OpenGL\OpenGL\Dependencies\GLM\include;$(SolutionDir)\OpenGL\Dependencies\GLEW\include;$(SolutionDir)OpenGL\Dependencies\GLFW\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)OpenGL\Dependencies\GLFW\lib-vc2015;$(SolutionDir)OpenGL\Dependencies\GLEW\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;user32.lib;Gdi32.lib;Shell32.lib;glew32s.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\OpenGL\Dependencies\Assimp\lib;$(SolutionDir)OpenGL\Dependencies\GLFW\lib-vc2015;$(SolutionDir)OpenGL\Dependencies\GLEW\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;user32.lib;Gdi32.lib;Shell32.lib;glew32s.lib;assimp.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -126,6 +126,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\camera.h" />
+    <ClInclude Include="src\mesh.h" />
+    <ClInclude Include="src\model.h" />
     <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\stb_image.h" />
   </ItemGroup>
