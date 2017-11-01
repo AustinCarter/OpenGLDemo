@@ -16,7 +16,6 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
-unsigned int loadTexture(char const * path);
 
 // settings
 const unsigned int SCR_WIDTH = 800;
@@ -81,7 +80,7 @@ int main()
 	Shader ourShader("resources/shader.vert", "resources/shader.frag"); //load and compile shaders
 	//Shader lampShader("resources/lightShader.vert", "resources/lightShader.frag"); //load and compile light shaders
 
-	Model ourModel("resources/nanosuit.obj");
+	Model ourModel("resources/nanosuit/nanosuit.obj");
 
 	// render loop
 	while (!glfwWindowShouldClose(window))
@@ -101,7 +100,18 @@ int main()
 
 
 		ourShader.use();
-		
+
+		//pointLight 
+		//
+		glm::vec3 pointLightPosition = glm::vec3(0.5f, 1.2f, 0.2f);
+
+		ourShader.setVec3("pointLight.position", pointLightPosition);
+        ourShader.setVec3("pointLight.ambient", 0.05f, 0.05f, 0.05f);
+        ourShader.setVec3("pointLight.diffuse", 0.8f, 0.8f, 0.8f);
+        ourShader.setVec3("pointLight.specular", 1.0f, 1.0f, 1.0f);
+        ourShader.setFloat("pointLight.constant", 1.0f);
+        ourShader.setFloat("pointLight.linear", 0.09);
+        ourShader.setFloat("pointLight.quadratic", 0.032);
        //spotlight
         ourShader.setVec3("spotLight.position", camera.Position);
         ourShader.setVec3("spotLight.direction", camera.Front);
@@ -114,6 +124,7 @@ int main()
         ourShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
         ourShader.setFloat("spotLight.cutOffOuter", glm::cos(glm::radians(17.5f)));   
 
+        ourShader.setVec3("viewPos", camera.Position);
         ourShader.setFloat("shininess", 32.0f); 
 
        // view/projection transformations
