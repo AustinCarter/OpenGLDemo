@@ -84,6 +84,9 @@ int main()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
+	//glCullFace(GL_FRONT); 
+
+
 	vector<glm::vec3> vegetation;
 	vegetation.push_back(glm::vec3(-1.5f,  0.0f, -0.48f));
 	vegetation.push_back(glm::vec3( 1.5f,  0.0f,  0.51f));
@@ -151,6 +154,8 @@ int main()
 
 		ourShader.use();
 
+		glEnable(GL_CULL_FACE);
+
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
 
@@ -217,6 +222,8 @@ int main()
         glStencilFunc(GL_ALWAYS, 1, 0xFF);
         glStencilMask(0xFF);
         glEnable(GL_DEPTH_TEST);
+
+        glDisable(GL_CULL_FACE);
 
         transShader.use();
 
