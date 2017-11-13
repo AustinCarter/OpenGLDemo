@@ -188,6 +188,7 @@ private:
             }
             if(!skip)
             {   // if texture hasn't been loaded already, load it
+               
                 Texture texture;
                 texture.id = TextureFromFile(str.C_Str(), this->directory);
                 texture.type = typeName;
@@ -214,10 +215,10 @@ unsigned int TextureFromFile(const char *path, const string &directory, bool gam
     if (data)
     {
         GLenum format;
-        if (nrComponents == 1)
+       if (nrComponents == 1)
             format = GL_RED;
         else if (nrComponents == 3)
-            format = GL_RGB;
+             format = GL_RGB;
         else if (nrComponents == 4)
             format = GL_RGBA;
 

@@ -12,6 +12,7 @@
 #include "camera.h"
 #include "model.h"
 
+const unsigned int samples = 4;
 
 //function prototypes
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -54,11 +55,13 @@ int main()
 	}
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_SAMPLES, samples); //number of samples for MSAA
+
 
 
 	// Create a windowed mode window and its OpenGL context 
-	window = glfwCreateWindow(800, 600, "Not Not Not Not Not (Not^5) Hello World", NULL, NULL);
+	window = glfwCreateWindow(800, 600, "OpenGL Demo", NULL, NULL);
 	if (!window)
 	{
 		std::cout << "Failed to create window" << std::endl;
@@ -85,6 +88,11 @@ int main()
 
     glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glEnable(GL_MULTISAMPLE); //anit-aliasing
+
+   // glEnable(GL_FRAMEBUFFER_SRGB); //gamma correction
+
 
 
 	//glCullFace(GL_FRONT); 
@@ -167,12 +175,12 @@ int main()
 
     vector<std::string> faces
 	{
-	    "resources/darkskies/right.tga",
-	    "resources/darkskies/left.tga",
-	    "resources/darkskies/top.tga",
-	    "resources/darkskies/bottom.tga",
-	    "resources/darkskies/back.tga",
-	    "resources/darkskies/front.tga"
+	    "resources/ely_nevada/right.tga",
+	    "resources/ely_nevada/left.tga",
+	    "resources/ely_nevada/top.tga",
+	    "resources/ely_nevada/bottom.tga",
+	    "resources/ely_nevada/back.tga",
+	    "resources/ely_nevada/front.tga"
 	};
 
 
@@ -257,7 +265,7 @@ int main()
 
 
         ourShader.setVec3("viewPos", camera.Position);
-        ourShader.setFloat("shininess", 32.0f); 
+        ourShader.setFloat("shininess", 64.0f); 
 
        // view/projection transformations
         
